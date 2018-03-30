@@ -1,0 +1,51 @@
+﻿@page
+@using CalibreWeb.Resources
+@inject LocService SharedLocalizer
+@model IndexModel
+@{
+    ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Books");
+}
+<h2>@Model.Title</h2>
+@if (Model.ShowAllLink)
+{
+    <h3><a href="@Url.Page("Index")">@SharedLocalizer.GetLocalizedHtmlString("AllAuthors")</a></h3>
+}
+<div id="booklist">
+    @foreach (var book in Model.Books)
+    {
+        <div class="summary">
+            <div class="left">
+                @if (book.HasCover)
+                {
+                    <img class="cover" src="@Url.Action("Index", "Cover", new { path = Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(book.Path)) })" />
+                }
+                else
+                {
+                    <img class="cover" src="~/images/cover.jpg" />
+                }
+            </div>
+            <div class="right">
+                <div class="title">
+                    <strong>@book.Title</strong>
+                </div>
+                <div class="authors">
+                    <a href="@(Url.Page("Index") + "?authorId=" + book.AuthorId)">@book.Author</a>
+                </div>
+                <div class="tags">
+                    <strong>@SharedLocalizer.GetLocalizedHtmlString("Language")</strong> @book.Language
+                </div>
+                <div class="formats">
+                    <strong>@SharedLocalizer.GetLocalizedHtmlString("Download")</strong>
+                    @for (int i = 0; i < book.Formats.Count; i++)
+                    {
+                        <a href="@Url.Action("Index", "Download", new { path = Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(book.Path + "\\" + book.Formats[i].Name + "." + book.Formats[i].Format.ToLower())) })">@book.Formats[i].Format</a>@(i < book.Formats.Count - 1 ? ", " : "")
+                    }
+                </div>
+                <div class="comments">
+                    @Html.Raw(book.Comments)
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    }
+</div>

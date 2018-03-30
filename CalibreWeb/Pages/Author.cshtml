@@ -1,0 +1,35 @@
+﻿@page
+@using CalibreWeb.Resources
+@inject LocService SharedLocalizer
+@model AuthorModel
+@{
+    ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Authors");
+}
+<h2>@ViewData["Title"]</h2>
+
+<table id="authorlist">
+    <thead>
+        <tr>
+            <td>@SharedLocalizer.GetLocalizedHtmlString("AuthorName")</td>
+            <td>@SharedLocalizer.GetLocalizedHtmlString("BookCount")</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var author in Model.Authors)
+        {
+            <tr data-id="@author.Id">
+                <td>@author.Name</td>
+                <td>@author.BookCount</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+    $("#authorlist tr").click(function () {
+        var authorId = $(this).closest("tr").data("id");
+        location.href = '@Url.Page("Index")?authorId=' + authorId;
+    });
+    </script>
+}
