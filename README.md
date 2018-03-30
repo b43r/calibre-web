@@ -11,7 +11,7 @@ CalibreWeb works similar than the built-in Calibre content server: It displays y
 - List of authors
 - Display all books of an author
 
-Note that you **cannot** read your ebboks with CalibreWeb, but you can download them.
+Note that you **cannot** use CalibreWeb to **read** your ebooks in a web-browser!
 
 ![CalibreWeb](https://github.com/b43r/calibre-web/raw/master/calibre-web.png "CalibreWeb screenshot")
 
