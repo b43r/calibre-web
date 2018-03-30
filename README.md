@@ -8,8 +8,8 @@ If you want to give someone access to you ebook catalogue, but don't want to per
 ## Features
 
 - Display cover images
-- Display Calibre metadata title, author, language and description
-- Download of all available formats
+- Display Calibre metadata (title, author, language and description)
+- Download of ebooks in all available formats
 - List of authors
 - Display all books of an author
 
