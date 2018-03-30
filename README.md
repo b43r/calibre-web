@@ -1,7 +1,7 @@
 # CalibreWeb
 ASP.NET Core web-app for browsing and downloading ebooks stored in a Calibre database.
 
-CalibreWeb works similar than the built-in Calibre content server: It displays your ebooks stored in a Calibre database on a HTML page.
+CalibreWeb works similar to the built-in Calibre content server: It displays your ebooks stored in a Calibre database on a HTML page.
 
 If you want to give someone access to you ebook catalogue, but don't want to permanently run Calibre on your Windows web-server, then CalibreWeb is the right thing for you!
 
