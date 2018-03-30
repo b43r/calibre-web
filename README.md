@@ -11,9 +11,14 @@ Note that you **cannot** read your ebboks with CalibreWeb, but you can download 
 
 Build CalibreWeb yourself from source or download the latest binary release.
 
+Follow Microsoft documentation on how to host an ASP.NET Core web-app on IIS (https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?tabs=aspnetcore2x).
+
 Edit *appsettings.json* and configure the path to your Calibre database:
 ```
   "Calibre": {
     "CataloguePath": "C:\\inetpub\\CalibreDB"
   }
 ```
+
+With "Calibre database" I mean the directory containing *metadata.db* and all sub-directories containing your ebooks.
+**Important:** Make sure the IIS application pool user has write access to this directory, otherwise the web-app will be very slow!
