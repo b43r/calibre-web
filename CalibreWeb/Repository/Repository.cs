@@ -16,30 +16,17 @@
  * 
  */
 
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
-using CalibreWeb.Models;
-using CalibreWeb.ViewModels;
-using CalibreWeb.Repository;
-
-namespace CalibreWeb.Pages
+namespace CalibreWeb.Repository
 {
-    public class AuthorModel : PageModel
+    public class Repository
     {
-        private readonly AuthorRepository authorRepository;
+        protected readonly DbContext dbContext;
 
-        public AuthorModel(CalibreContext db)
+        public Repository(DbContext dbContext)
         {
-            authorRepository = new AuthorRepository(db);
-        }
-
-        public IEnumerable<AuthorVm> Authors { get; set; }
-
-        public void OnGet()
-        {
-            Authors = authorRepository.GetAllAuthors();
+            this.dbContext = dbContext;
         }
     }
 }

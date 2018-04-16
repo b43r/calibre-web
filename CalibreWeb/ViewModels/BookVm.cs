@@ -18,8 +18,6 @@
 
 using System.Collections.Generic;
 
-using CalibreWeb.Models;
-
 namespace CalibreWeb.ViewModels
 {
     public class BookVm
@@ -30,7 +28,7 @@ namespace CalibreWeb.ViewModels
         public string Comments { get; set; }
         public string Language { get; set; }
         public string Path { get; set; }
-        public List<Data> Formats { get; set; }
+        public List<DataVm> Formats { get; set; }
         public bool HasCover { get; set; }
     }
 }

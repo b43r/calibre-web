@@ -24,17 +24,21 @@ using Microsoft.Extensions.Localization;
 
 using CalibreWeb.Models;
 using CalibreWeb.ViewModels;
+using CalibreWeb.Repository;
 
 namespace CalibreWeb.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly CalibreContext db;
         private readonly IStringLocalizer<SharedResource> loc;
+
+        private readonly BookRepository bookRepository;
+        private readonly AuthorRepository authorRepository;
 
         public IndexModel(CalibreContext db, IStringLocalizer<SharedResource> loc)
         {
-            this.db = db;
+            bookRepository = new BookRepository(db);
+            authorRepository = new AuthorRepository(db);
             this.loc = loc;
         }
 
@@ -48,35 +52,18 @@ namespace CalibreWeb.Pages
         {
             if (authorId.HasValue)
             {
-                var author = db.Authors.Find(authorId.Value);
+                var author = authorRepository.GetAuthorById(authorId.Value);
                 if (author != null)
                 {
-                    Books = from b in db.Books
-                            join ba in db.BooksAuthorsLink on b.Id equals ba.Book
-                            join a in db.Authors on ba.Author equals a.Id
-                            join comment in db.Comments on b.Id equals comment.Book into comments
-                            from comment in comments.DefaultIfEmpty()
-                            join bl in db.BooksLanguagesLink on b.Id equals bl.Book
-                            join l in db.Languages on bl.LangCode equals l.Id
-                            where a.Id == authorId.Value
-                            orderby b.Title
-                            select new BookVm { Title = b.Title, AuthorId = a.Id, Author = a.Sort, Comments = comment.Text, Language = l.LangCode, Path = b.Path, HasCover = b.HasCover == "1", Formats = db.Data.Where(d => d.Book == b.Id).OrderBy(d => d.Format).ToList() };
+                    Books = bookRepository.GetBooksByAuthor(authorId.Value);
 
-                    Title = loc["Books"] + $" - {author.Sort} ({Books.Count()})";
+                    Title = loc["Books"] + $" - {author.Name} ({Books.Count()})";
                     ShowAllLink = true;
                     return;
                 }
             }
 
-            Books = from b in db.Books
-                    join ba in db.BooksAuthorsLink on b.Id equals ba.Book
-                    join a in db.Authors on ba.Author equals a.Id
-                    join comment in db.Comments on b.Id equals comment.Book into comments
-                    from comment in comments.DefaultIfEmpty()
-                    join bl in db.BooksLanguagesLink on b.Id equals bl.Book
-                    join l in db.Languages on bl.LangCode equals l.Id
-                    orderby b.Title
-                    select new BookVm { Title = b.Title, AuthorId = a.Id, Author = a.Sort, Comments = comment.Text, Language = l.LangCode, Path = b.Path, HasCover = b.HasCover == "1", Formats = db.Data.Where(d => d.Book == b.Id).OrderBy(d => d.Format).ToList() };
+            Books = bookRepository.GetAllBooks();
             Title = loc["Books"] + $" ({Books.Count()})";
             ShowAllLink = false;
         }
