@@ -21,7 +21,7 @@ Note that you **cannot** use CalibreWeb to **read** your ebooks in a web-browser
 
 Build CalibreWeb yourself from source or [download the latest binary release](https://github.com/b43r/calibre-web/releases/download/1.0/CalibreWeb_1_0.zip).
 
-Follow Microsoft documentation on how to host an ASP.NET Core web-app on IIS (https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?tabs=aspnetcore2x).
+Follow Microsoft documentation on how to host a .NET 6.0 web-app on IIS (https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-6.0).
 
 Edit *appsettings.json* and configure the path to your Calibre database:
 ```
