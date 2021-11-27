@@ -16,20 +16,69 @@
  * 
  */
 
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+using CalibreWeb.Models;
+using CalibreWeb.Resources;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
-namespace CalibreWeb
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddSingleton<LocService>();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddMvc();
+
+// German and English localization is supported, whereas German is the default
+builder.Services.Configure<RequestLocalizationOptions>(
+    options =>
     {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+        var supportedCultures = new List<CultureInfo>
+            {
+                            new CultureInfo("en"),
+                            new CultureInfo("de"),
+            };
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
-    }
+        options.DefaultRequestCulture = new RequestCulture(culture: "de", uiCulture: "de");
+        options.SupportedCultures = supportedCultures;
+        options.SupportedUICultures = supportedCultures;
+
+        options.RequestCultureProviders.Insert(0, new QueryStringRequestCultureProvider());
+    });
+
+string db = Path.Combine(builder.Configuration["Calibre:CataloguePath"], "metadata.db");
+if (!File.Exists(db))
+{
+    throw new Exception($"Calibre DB not found at \"{db}\".");
 }
+
+var connection = $"Data Source={db}";
+builder.Services.AddDbContext<CalibreContext>(options => options.UseSqlite(connection));
+
+builder.Services.AddRazorPages();
+
+var app = builder.Build();
+
+var locOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(locOptions.Value);
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapRazorPages();
+
+app.Run();

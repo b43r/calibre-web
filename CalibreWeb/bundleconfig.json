@@ -26,27 +26,5 @@
     },
     // Optionally generate .map file
     "sourceMap": false
-  },
-  {
-    "outputFileName": "wwwroot/lib/bootstrap/dist/js/bootstrap.min.js",
-    "inputFiles": [
-      "wwwroot/lib/bootstrap/dist/js/bootstrap.js"
-    ],
-    "minify": {
-      "enabled": true,
-      "renameLocals": true
-    },
-    "sourceMap": false
-  },
-  {
-    "outputFileName": "wwwroot/lib/jquery/dist/jquery.min.js",
-    "inputFiles": [
-      "wwwroot/lib/jquery/dist/jquery.js"
-    ],
-    "minify": {
-      "enabled": true,
-      "renameLocals": true
-    },
-    "sourceMap": false
   }
 ]

@@ -80,10 +80,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("books");
 
                 entity.HasIndex(e => e.AuthorSort)
-                    .HasName("authors_idx");
+                    .HasDatabaseName("authors_idx");
 
                 entity.HasIndex(e => e.Sort)
-                    .HasName("books_idx");
+                    .HasDatabaseName("books_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -148,10 +148,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("books_authors_link");
 
                 entity.HasIndex(e => e.Author)
-                    .HasName("books_authors_link_aidx");
+                    .HasDatabaseName("books_authors_link_aidx");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("books_authors_link_bidx");
+                    .HasDatabaseName("books_authors_link_bidx");
 
                 entity.HasIndex(e => new { e.Book, e.Author })
                     .IsUnique();
@@ -170,10 +170,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("books_languages_link");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("books_languages_link_bidx");
+                    .HasDatabaseName("books_languages_link_bidx");
 
                 entity.HasIndex(e => e.LangCode)
-                    .HasName("books_languages_link_aidx");
+                    .HasDatabaseName("books_languages_link_aidx");
 
                 entity.HasIndex(e => new { e.Book, e.LangCode })
                     .IsUnique();
@@ -218,10 +218,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("books_publishers_link");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("books_publishers_link_bidx");
+                    .HasDatabaseName("books_publishers_link_bidx");
 
                 entity.HasIndex(e => e.Publisher)
-                    .HasName("books_publishers_link_aidx");
+                    .HasDatabaseName("books_publishers_link_aidx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -237,10 +237,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("books_ratings_link");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("books_ratings_link_bidx");
+                    .HasDatabaseName("books_ratings_link_bidx");
 
                 entity.HasIndex(e => e.Rating)
-                    .HasName("books_ratings_link_aidx");
+                    .HasDatabaseName("books_ratings_link_aidx");
 
                 entity.HasIndex(e => new { e.Book, e.Rating })
                     .IsUnique();
@@ -259,10 +259,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("books_series_link");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("books_series_link_bidx");
+                    .HasDatabaseName("books_series_link_bidx");
 
                 entity.HasIndex(e => e.Series)
-                    .HasName("books_series_link_aidx");
+                    .HasDatabaseName("books_series_link_aidx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -278,10 +278,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("books_tags_link");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("books_tags_link_bidx");
+                    .HasDatabaseName("books_tags_link_bidx");
 
                 entity.HasIndex(e => e.Tag)
-                    .HasName("books_tags_link_aidx");
+                    .HasDatabaseName("books_tags_link_aidx");
 
                 entity.HasIndex(e => new { e.Book, e.Tag })
                     .IsUnique();
@@ -300,7 +300,7 @@ namespace CalibreWeb.Models
                 entity.ToTable("comments");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("comments_idx");
+                    .HasDatabaseName("comments_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -318,10 +318,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("conversion_options");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("conversion_options_idx_b");
+                    .HasDatabaseName("conversion_options_idx_b");
 
                 entity.HasIndex(e => e.Format)
-                    .HasName("conversion_options_idx_a");
+                    .HasDatabaseName("conversion_options_idx_a");
 
                 entity.HasIndex(e => new { e.Format, e.Book })
                     .IsUnique();
@@ -346,7 +346,7 @@ namespace CalibreWeb.Models
                 entity.ToTable("custom_columns");
 
                 entity.HasIndex(e => e.Label)
-                    .HasName("custom_columns_idx");
+                    .HasDatabaseName("custom_columns_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -398,10 +398,10 @@ namespace CalibreWeb.Models
                 entity.ToTable("data");
 
                 entity.HasIndex(e => e.Book)
-                    .HasName("data_idx");
+                    .HasDatabaseName("data_idx");
 
                 entity.HasIndex(e => e.Format)
-                    .HasName("formats_idx");
+                    .HasDatabaseName("formats_idx");
 
                 entity.HasIndex(e => new { e.Book, e.Format })
                     .IsUnique();
@@ -471,7 +471,7 @@ namespace CalibreWeb.Models
                 entity.ToTable("languages");
 
                 entity.HasIndex(e => e.LangCode)
-                    .HasName("languages_idx");
+                    .HasDatabaseName("languages_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -537,7 +537,7 @@ namespace CalibreWeb.Models
                 entity.ToTable("publishers");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("publishers_idx");
+                    .HasDatabaseName("publishers_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -569,7 +569,7 @@ namespace CalibreWeb.Models
                 entity.ToTable("series");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("series_idx");
+                    .HasDatabaseName("series_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -587,7 +587,7 @@ namespace CalibreWeb.Models
                 entity.ToTable("tags");
 
                 entity.HasIndex(e => e.Name)
-                    .HasName("tags_idx");
+                    .HasDatabaseName("tags_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
