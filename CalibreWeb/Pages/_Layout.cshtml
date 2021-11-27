@@ -3,58 +3,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="icon" href="/books.png" type="image/png">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CalibreWeb</title>
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.min.css" />
-    </environment>
+	<link rel="icon" href="/books.png" type="image/png">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - CalibreWeb</title>
+	<environment include="Development">
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="~/css/site.css" />
+	</environment>
+	<environment exclude="Development">
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="~/css/site.min.css" />
+	</environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-page="/Index" class="navbar-brand">CalibreWeb</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-page="/Index">@SharedLocalizer.GetLocalizedHtmlString("Books")</a></li>
-                    <li><a asp-page="/Author">@SharedLocalizer.GetLocalizedHtmlString("Authors")</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>CalibreWeb &copy; 2018 by Simon Baer (@System.Diagnostics.Process.GetCurrentProcess().ProcessName)</p>
-        </footer>
-    </div>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<img src="~/images/Calibre_logo_2.png" height="64" class="navbar-brand" />
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="nav-link active">CalibreWeb</a>
+					</li>
+					<li class="nav-item"><a asp-page="/Index" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Books")</a></li>
+					<li class="nav-item"><a asp-page="/Author" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Authors")</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery-3.6.0.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/lib/jquery/dist/jquery-3.6.0.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>CalibreWeb &copy; 2021 by Simon Baer (@System.Diagnostics.Process.GetCurrentProcess().ProcessName)</p>
+		</footer>
+	</div>
 
-    @RenderSection("Scripts", required: false)
+	<environment include="Development">
+		<script src="~/lib/jquery/dist/jquery-3.6.0.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="~/js/site.js" asp-append-version="true"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="~/lib/jquery/dist/jquery-3.6.0.min.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="~/js/site.min.js" asp-append-version="true"></script>
+	</environment>
+
+	@RenderSection("Scripts", required: false)
 </body>
 </html>

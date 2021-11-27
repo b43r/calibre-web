@@ -1,7 +1,7 @@
 ﻿/*
  * CalibreWeb
  * 
- * Copyright (C) 2018 by Simon Baer
+ * Copyright (C) 2018..2021 by Simon Baer
  *
  * This program is free software; you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation; either
@@ -34,13 +34,12 @@ namespace CalibreWeb.Repository
         public IEnumerable<BookVm> GetAllBooks()
         {
             return from b in CalibreContext.Books
-                   join d in CalibreContext.Data on b.Id equals d.Book into dataGrp
                    join ba in CalibreContext.BooksAuthorsLink on b.Id equals ba.Book
                    join a in CalibreContext.Authors on ba.Author equals a.Id
                    join comment in CalibreContext.Comments on b.Id equals comment.Book into comments
                    from comment in comments.DefaultIfEmpty()
                    join bl in CalibreContext.BooksLanguagesLink on b.Id equals bl.Book
-                   join l in CalibreContext.Languages on bl.LangCode equals l.Id                   
+                   join l in CalibreContext.Languages on bl.LangCode equals l.Id
                    orderby b.Title
                    select new BookVm
                    {
@@ -51,14 +50,13 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = dataGrp.OrderBy(d => d.Format).Select(x => new DataVm { Format = x.Format, FileName = x.Name + "." + x.Format.ToLower() }).ToList()
-                   };
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList()
+            };
         }
 
         public IEnumerable<BookVm> GetBooksByAuthor(long authorId)
         {
             return from b in CalibreContext.Books
-                   join d in CalibreContext.Data on b.Id equals d.Book into dataGrp
                    join ba in CalibreContext.BooksAuthorsLink on b.Id equals ba.Book
                    join a in CalibreContext.Authors on ba.Author equals a.Id
                    join comment in CalibreContext.Comments on b.Id equals comment.Book into comments
@@ -76,7 +74,7 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = dataGrp.OrderBy(d => d.Format).Select(x => new DataVm { Format = x.Format, FileName = x.Name + "." + x.Format.ToLower() }).ToList()
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList()
                    };
         }
 

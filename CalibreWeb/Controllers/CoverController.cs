@@ -1,7 +1,7 @@
 ﻿/*
  * CalibreWeb
  * 
- * Copyright (C) 2018 by Simon Baer
+ * Copyright (C) 2018..2021 by Simon Baer
  *
  * This program is free software; you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation; either
@@ -16,11 +16,7 @@
  * 
  */
 
-using System;
-using System.IO;
-
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace CalibreWeb.Controllers
 {
@@ -45,6 +41,7 @@ namespace CalibreWeb.Controllers
                 var image = System.IO.File.OpenRead(file);
                 return File(image, "image/jpeg");
             }
+
             return new EmptyResult();
         }
     }

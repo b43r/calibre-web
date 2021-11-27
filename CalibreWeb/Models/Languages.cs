@@ -1,7 +1,7 @@
 ﻿/*
  * CalibreWeb
  * 
- * Copyright (C) 2018 by Simon Baer
+ * Copyright (C) 2018..2021 by Simon Baer
  *
  * This program is free software; you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation; either

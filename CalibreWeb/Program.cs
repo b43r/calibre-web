@@ -1,7 +1,7 @@
 ﻿/*
  * CalibreWeb
  * 
- * Copyright (C) 2018 by Simon Baer
+ * Copyright (C) 2018..2021 by Simon Baer
  *
  * This program is free software; you can redistribute it and/or modify it under the terms
  * of the GNU General Public License as published by the Free Software Foundation; either
@@ -16,12 +16,14 @@
  * 
  */
 
-using CalibreWeb.Models;
-using CalibreWeb.Resources;
+using System.Globalization;
+
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Globalization;
+
+using CalibreWeb.Models;
+using CalibreWeb.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,8 +39,8 @@ builder.Services.Configure<RequestLocalizationOptions>(
     {
         var supportedCultures = new List<CultureInfo>
             {
-                            new CultureInfo("en"),
-                            new CultureInfo("de"),
+                new CultureInfo("en"),
+                new CultureInfo("de"),
             };
 
         options.DefaultRequestCulture = new RequestCulture(culture: "de", uiCulture: "de");
@@ -78,6 +80,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
