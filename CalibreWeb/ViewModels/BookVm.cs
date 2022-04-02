@@ -16,8 +16,6 @@
  * 
  */
 
-using System.Collections.Generic;
-
 namespace CalibreWeb.ViewModels
 {
     public class BookVm
@@ -30,5 +28,15 @@ namespace CalibreWeb.ViewModels
         public string Path { get; set; }
         public List<DataVm> Formats { get; set; }
         public bool HasCover { get; set; }
+        public string SeriesName { get; set; }
+        public double SeriesNumber { get; set; }
+
+        public string TitleAndSeries
+        {
+            get
+            {
+                return Title + (!string.IsNullOrWhiteSpace(SeriesName) ? $" ({SeriesName + (SeriesNumber > 0 ? $" {SeriesNumber:##}" : string.Empty)})" : string.Empty);
+            }
+        }
     }
 }

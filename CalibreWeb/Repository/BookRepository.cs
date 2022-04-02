@@ -16,9 +16,6 @@
  * 
  */
 
-using System.Collections.Generic;
-using System.Linq;
-
 using CalibreWeb.Models;
 using CalibreWeb.ViewModels;
 
@@ -40,6 +37,10 @@ namespace CalibreWeb.Repository
                    from comment in comments.DefaultIfEmpty()
                    join bl in CalibreContext.BooksLanguagesLink on b.Id equals bl.Book
                    join l in CalibreContext.Languages on bl.LangCode equals l.Id
+                   join bs in CalibreContext.BooksSeriesLink on b.Id equals bs.Book into book_series_link
+                   from bs in book_series_link.DefaultIfEmpty()
+                   join s in CalibreContext.Series on bs.Series equals s.Id into series
+                   from s in series.DefaultIfEmpty()
                    orderby b.Title
                    select new BookVm
                    {
@@ -50,7 +51,9 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList()
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       SeriesName = s.Name,
+                       SeriesNumber = b.SeriesIndex
             };
         }
 
@@ -63,6 +66,10 @@ namespace CalibreWeb.Repository
                    from comment in comments.DefaultIfEmpty()
                    join bl in CalibreContext.BooksLanguagesLink on b.Id equals bl.Book
                    join l in CalibreContext.Languages on bl.LangCode equals l.Id
+                   join bs in CalibreContext.BooksSeriesLink on b.Id equals bs.Book into book_series_link
+                   from bs in book_series_link.DefaultIfEmpty()
+                   join s in CalibreContext.Series on bs.Series equals s.Id into series
+                   from s in series.DefaultIfEmpty()
                    where a.Id == authorId
                    orderby b.Title
                    select new BookVm
@@ -74,7 +81,9 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList()
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       SeriesName = s.Name,
+                       SeriesNumber = b.SeriesIndex
                    };
         }
 
