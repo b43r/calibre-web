@@ -20,6 +20,7 @@ namespace CalibreWeb.ViewModels
 {
     public class DataVm
     {
+        public long Id { get; set; }
         public string Format { get; set; }
         public string FileName { get; set; }
     }

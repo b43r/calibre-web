@@ -20,6 +20,7 @@ namespace CalibreWeb.ViewModels
 {
     public class BookVm
     {
+        public long Id { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
         public long AuthorId { get; set; }

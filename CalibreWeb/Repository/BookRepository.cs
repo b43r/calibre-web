@@ -44,6 +44,7 @@ namespace CalibreWeb.Repository
                    orderby b.Title
                    select new BookVm
                    {
+                       Id = b.Id,
                        Title = b.Title,
                        AuthorId = a.Id,
                        Author = a.Sort,
@@ -51,7 +52,7 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
                        SeriesName = s.Name,
                        SeriesNumber = b.SeriesIndex
             };
@@ -74,6 +75,7 @@ namespace CalibreWeb.Repository
                    orderby b.Title
                    select new BookVm
                    {
+                       Id = b.Id,
                        Title = b.Title,
                        AuthorId = a.Id,
                        Author = a.Sort,
@@ -81,10 +83,42 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
                        SeriesName = s.Name,
                        SeriesNumber = b.SeriesIndex
                    };
+        }
+
+        public BookVm GetBookById(long bookId)
+        {
+            var query = from b in CalibreContext.Books
+                   join ba in CalibreContext.BooksAuthorsLink on b.Id equals ba.Book
+                   join a in CalibreContext.Authors on ba.Author equals a.Id
+                   join comment in CalibreContext.Comments on b.Id equals comment.Book into comments
+                   from comment in comments.DefaultIfEmpty()
+                   join bl in CalibreContext.BooksLanguagesLink on b.Id equals bl.Book
+                   join l in CalibreContext.Languages on bl.LangCode equals l.Id
+                   join bs in CalibreContext.BooksSeriesLink on b.Id equals bs.Book into book_series_link
+                   from bs in book_series_link.DefaultIfEmpty()
+                   join s in CalibreContext.Series on bs.Series equals s.Id into series
+                   from s in series.DefaultIfEmpty()
+                   where b.Id == bookId
+                   orderby b.Title
+                   select new BookVm
+                   {
+                       Id = b.Id,
+                       Title = b.Title,
+                       AuthorId = a.Id,
+                       Author = a.Sort,
+                       Comments = comment.Text,
+                       Language = l.LangCode,
+                       Path = b.Path,
+                       HasCover = b.HasCover == "1",
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       SeriesName = s.Name,
+                       SeriesNumber = b.SeriesIndex
+                   };
+            return query.FirstOrDefault();
         }
 
         private CalibreContext CalibreContext => base.dbContext as CalibreContext;

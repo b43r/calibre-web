@@ -18,27 +18,39 @@
 
 using Microsoft.AspNetCore.Mvc;
 
+using CalibreWeb.Models;
+using CalibreWeb.Repository;
+
 namespace CalibreWeb.Controllers
 {
     public class DownloadController : Controller
     {
         private IConfiguration configuration;
+        private readonly BookRepository bookRepository;
 
-        public DownloadController(IConfiguration configuration)
+        public DownloadController(CalibreContext db, IConfiguration configuration)
         {
+            bookRepository = new BookRepository(db);
             this.configuration = configuration;
         }
 
-        public IActionResult Index(string path)
+        public IActionResult Index(int id, int formatId)
         {
-            path = System.Text.Encoding.Default.GetString(Convert.FromBase64String(path));
-            path = Path.Combine(configuration["Calibre:CataloguePath"], path);
-            if (System.IO.File.Exists(path))
+            var book = bookRepository.GetBookById(id);
+            if (book != null)
             {
-                var image = System.IO.File.OpenRead(path);
-                return File(image, GetMimeType(Path.GetExtension(path)), Path.GetFileName(path));
+                var format = book.Formats.FirstOrDefault(f => f.Id == formatId);
+                if (format != null)
+                {
+                    string file = Path.Combine(configuration["Calibre:CataloguePath"], book.Path, format.FileName);
+                    if (System.IO.File.Exists(file))
+                    {
+                        var fs = System.IO.File.OpenRead(file);
+                        return File(fs, GetMimeType(Path.GetExtension(file)), Path.GetFileName(file));
+                    }
+                }
             }
-
+            
             return new NotFoundResult();
         }
 

@@ -33,9 +33,7 @@ namespace CalibreWeb.Controllers
         public ActionResult Index(string path)
         {
             path = System.Text.Encoding.Default.GetString(Convert.FromBase64String(path));
-            path = Path.Combine(configuration["Calibre:CataloguePath"], path);
-
-            string file = Path.Combine(path, "cover.jpg");
+            string file = Path.Combine(configuration["Calibre:CataloguePath"], path, "cover.jpg");
             if (System.IO.File.Exists(file))
             {
                 var image = System.IO.File.OpenRead(file);
