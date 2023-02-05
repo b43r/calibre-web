@@ -56,7 +56,8 @@ if (!File.Exists(db))
     throw new Exception($"Calibre DB not found at \"{db}\".");
 }
 
-var connection = $"Data Source={db}";
+// Open Calibre DB in readonly mode so Calibre can run while web is running
+var connection = $"Data Source={db};Mode=ReadOnly;";
 builder.Services.AddDbContext<CalibreContext>(options => options.UseSqlite(connection));
 
 builder.Services.AddRazorPages();
