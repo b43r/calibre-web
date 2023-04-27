@@ -31,6 +31,9 @@
 					<li class="nav-item"><a asp-page="/Index" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Books")</a></li>
 					<li class="nav-item"><a asp-page="/Author" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Authors")</a></li>
 				</ul>
+				<div class="d-flex me-4" role="search">
+					<input id="txt-search" class="form-control me-2" type="search" placeholder="@SharedLocalizer.GetLocalizedHtmlString("Search")" aria-label="@SharedLocalizer.GetLocalizedHtmlString("Search")">
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -53,6 +56,26 @@
 		<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="~/js/site.min.js" asp-append-version="true"></script>
 	</environment>
+
+	<script>
+
+		var searchTimeout;
+
+		function searchTimerElapsed() {
+			let expr = $("#txt-search").val().toLowerCase();
+			if (window.doSearch !== undefined) {
+				doSearch(expr);
+			}
+		}
+
+		$(function () {
+			$("#txt-search").on("keyup", function () {
+				window.clearTimeout(searchTimeout);
+				searchTimeout = window.setTimeout(searchTimerElapsed, 200);
+			});
+		});
+
+	</script>
 
 	@RenderSection("Scripts", required: false)
 </body>

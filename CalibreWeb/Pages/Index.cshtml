@@ -5,15 +5,15 @@
 @{
     ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Books");
 }
-<h2>@Model.Title</h2>
+<h2>@Model.Title (<span></span>@Model.Books.Count())</h2>
 @if (Model.ShowAllLink)
 {
-    <h3><a href="@Url.Page("Index")">@SharedLocalizer.GetLocalizedHtmlString("AllAuthors")</a></h3>
+    <h3><a href="@Url.Page("Author")">@SharedLocalizer.GetLocalizedHtmlString("AllAuthors")</a></h3>
 }
 <div id="booklist">
     @foreach (var book in Model.Books)
     {
-        <div class="summary">
+        <div class="summary" data-title="@book.TitleAndSeries.ToLower()">
             <div class="left">
                 @if (book.HasCover)
                 {
@@ -32,7 +32,7 @@
                     <a href="@(Url.Page("Index") + "?authorId=" + book.AuthorId)">@book.Author</a>
                 </div>
                 <div class="tags">
-                    <strong>@SharedLocalizer.GetLocalizedHtmlString("Language")</strong> @book.Language
+                    <strong>@SharedLocalizer.GetLocalizedHtmlString("Language")</strong> @SharedLocalizer.GetLocalizedLanguage(book.Language)
                 </div>
                 <div class="formats">
                     <strong>@SharedLocalizer.GetLocalizedHtmlString("Download")</strong>
@@ -49,3 +49,31 @@
         </div>
     }
 </div>
+
+@section scripts {
+    <script>
+        function doSearch(expr) {
+            let divs = $("#booklist > div");
+            let total = divs.length;
+            let visible = 0;
+            for (let i = 0; i < divs.length; i++) {
+                if ($(divs[i]).data("title").includes(expr)) {
+                    $(divs[i]).removeClass("d-none");
+                    visible++;
+                } else {
+                    $(divs[i]).addClass("d-none");
+                }
+            }
+
+            if (visible !== total) {
+                $("h2 > span").text(visible + "/");
+            } else {
+                $("h2 > span").text("");
+            }
+        }
+
+        $(function () {
+            $("#txt-search").focus();
+        });
+    </script>
+}

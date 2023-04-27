@@ -16,9 +16,6 @@
  * 
  */
 
-using System.Collections.Generic;
-using System.Linq;
-
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Localization;
 
@@ -57,14 +54,14 @@ namespace CalibreWeb.Pages
                 {
                     Books = bookRepository.GetBooksByAuthor(authorId.Value);
 
-                    Title = loc["Books"] + $" - {author.Name} ({Books.Count()})";
+                    Title = loc["Books"] + $" - {author.Name}";
                     ShowAllLink = true;
                     return;
                 }
             }
 
             Books = bookRepository.GetAllBooks();
-            Title = loc["Books"] + $" ({Books.Count()})";
+            Title = loc["Books"];
             ShowAllLink = false;
         }
     }

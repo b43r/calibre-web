@@ -1,7 +1,12 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-top: 15px;
+    padding-top: 100px;
+}
+
+.navbar {
+    width: 100%;
+    position: fixed;
 }
 
 #booklist div.left {
@@ -15,7 +20,7 @@
 }
 
 #booklist div.right {
-    max-height: 250px;
+    max-height: 320px;
     overflow: auto;
     margin-left: 1em;
     margin-right: 1em;

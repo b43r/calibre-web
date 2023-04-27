@@ -16,6 +16,7 @@
  * 
  */
 
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Localization;
 
 namespace CalibreWeb
@@ -42,6 +43,18 @@ namespace CalibreWeb.Resources
         public LocalizedString GetLocalizedHtmlString(string key)
         {
             return _localizer[key];
+        }
+
+        public LocalizedString GetLocalizedLanguage(string langCode)
+        {
+            switch (langCode)
+            {
+                case "deu":
+                case "eng":
+                    return _localizer[langCode];
+                default:
+                    return new LocalizedString(langCode, langCode);
+            }
         }
     }
 }

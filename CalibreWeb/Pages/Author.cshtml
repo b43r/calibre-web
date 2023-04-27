@@ -5,7 +5,7 @@
 @{
     ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Authors");
 }
-<h2>@ViewData["Title"]</h2>
+<h2>@ViewData["Title"] (<span></span>@Model.Authors.Count())</h2>
 
 <table id="authorlist">
     <thead>
@@ -27,9 +27,36 @@
 
 @section scripts {
     <script>
-    $("#authorlist tr").click(function () {
-        var authorId = $(this).closest("tr").data("id");
-        location.href = '@Url.Page("Index")?authorId=' + authorId;
-    });
+
+        function doSearch(expr) {
+            let trs = $("#authorlist tbody tr");
+            let total = trs.length;
+            let visible = 0;
+            for (let i = 0; i < trs.length; i++) {
+                if ($(trs[i].cells[0]).text().toLowerCase().includes(expr)) {
+                    $(trs[i]).removeClass("d-none");
+                    visible++;
+                } else {
+                    $(trs[i]).addClass("d-none");
+                }
+            }
+
+            if (visible !== total) {
+                $("h2 > span").text(visible + "/");
+            } else {
+                $("h2 > span").text("");
+            }
+        }
+
+        $(function () {
+            $("#authorlist tr").click(function () {
+                var authorId = $(this).closest("tr").data("id");
+                if (authorId !== undefined) {
+                    location.href = '@Url.Page("Index")?authorId=' + authorId;
+                }
+            });
+
+            $("#txt-search").focus();
+        });
     </script>
 }

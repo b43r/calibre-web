@@ -52,7 +52,7 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id orderby d.Format select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
                        SeriesName = s.Name,
                        SeriesNumber = b.SeriesIndex
             };
@@ -83,7 +83,7 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id orderby d.Format select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
                        SeriesName = s.Name,
                        SeriesNumber = b.SeriesIndex
                    };
@@ -114,7 +114,7 @@ namespace CalibreWeb.Repository
                        Language = l.LangCode,
                        Path = b.Path,
                        HasCover = b.HasCover == "1",
-                       Formats = (from d in CalibreContext.Data where d.Book == b.Id select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
+                       Formats = (from d in CalibreContext.Data where d.Book == b.Id orderby d.Format select new DataVm { Id = d.Id, Format = d.Format, FileName = d.Name + "." + d.Format.ToLower() }).ToList(),
                        SeriesName = s.Name,
                        SeriesNumber = b.SeriesIndex
                    };

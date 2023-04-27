@@ -132,10 +132,19 @@
   <data name="Books" xml:space="preserve">
     <value>Bücher</value>
   </data>
+  <data name="deu" xml:space="preserve">
+    <value>Deutsch</value>
+  </data>
   <data name="Download" xml:space="preserve">
     <value>Download als:</value>
   </data>
+  <data name="eng" xml:space="preserve">
+    <value>Englisch</value>
+  </data>
   <data name="Language" xml:space="preserve">
     <value>Sprache:</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Suchen...</value>
   </data>
 </root>
