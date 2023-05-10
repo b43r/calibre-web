@@ -12,6 +12,7 @@ If you want to give someone access to you ebook catalogue, but don't want to per
 - Download of ebooks in all available formats
 - List of authors
 - Display all books of an author
+- Optionally require a login
 
 Note that you **cannot** use CalibreWeb to **read** your ebooks in a web-browser!
 
@@ -26,9 +27,29 @@ Follow Microsoft documentation on how to host a .NET 6.0 web-app on IIS (https:/
 Edit *appsettings.json* and configure the path to your Calibre database:
 ```
   "Calibre": {
-    "CataloguePath": "C:\\inetpub\\CalibreDB"
+    "CataloguePath": "C:\\inetpub\\CalibreDB",
+    "RequireLogin": false
   }
 ```
 
 With "Calibre database" I mean the directory containing *metadata.db* and all sub-directories containing your ebooks.
 **Important:** Make sure the IIS application pool user has write access to this directory, otherwise the web-app will be very slow!
+
+If you use the default configuration with ```"RequireLogin": false``` everyone has access to your e-books. If you want to restrict access to certain users, read the following paragraph.
+
+## Require login
+
+If you set the parameter ```"RequireLogin": true``` in *appsettings.json*, all users accessing the web page are required to login with a username and password. Users are configured in a text-file *users.json*:
+```
+[
+  {
+    "name": "john.doe@example.org",
+    "password": "123456",
+    "salt": "",
+    "role": "download"
+  },
+  {
+    ...
+  }
+]
+```
