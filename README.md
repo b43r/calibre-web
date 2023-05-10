@@ -12,7 +12,7 @@ If you want to give someone access to you ebook catalogue, but don't want to per
 - Download of ebooks in all available formats
 - List of authors
 - Display all books of an author
-- Optionally require a login
+- Optionally protect e-books with a login page
 
 Note that you **cannot** use CalibreWeb to **read** your ebooks in a web-browser!
 
