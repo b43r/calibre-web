@@ -53,10 +53,11 @@ If you set the parameter ```"RequireLogin": true``` in *appsettings.json*, all u
   }
 ]
 ```
-If you add a new user, enter the password in plaintext and add an empty "salt" value. After you have restart the application, a random "salt" will be generated and the plaintext password will be replaced with it's hash.
+If you add a new user, enter the password in plaintext and add an empty "salt" value. After you have restarted the application, a random "salt" will be generated and the plaintext password will be replaced with it's hash.
 
 Possible values for "role":
-. <empty> = view list of all books but downloading is not allowed
+
+. &lt;empty&gt; = view list of all books but downloading is not allowed
 - *download* = view a list of all books and show download links
 - *admin* = same as *download* (reserved for future use)
   
