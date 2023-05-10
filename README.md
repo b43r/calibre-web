@@ -57,7 +57,7 @@ If you add a new user, enter the password in plaintext and add an empty "salt" v
 
 Possible values for "role":
 
-. &lt;empty&gt; = view list of all books but downloading is not allowed
+- &lt;empty&gt; = view list of all books but downloading is not allowed
 - *download* = view a list of all books and show download links
 - *admin* = same as *download* (reserved for future use)
   
