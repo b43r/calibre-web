@@ -1,0 +1,39 @@
+﻿@page
+@using CalibreWeb.Resources
+@inject LocService SharedLocalizer
+@model CalibreWeb.Pages.LoginModel
+@{
+}
+
+
+<h1>Login</h1>
+<form method="post" asp-page="Login">
+    <div class="login-form">
+        <div>
+            <div class="col">
+                @SharedLocalizer.GetLocalizedHtmlString("Username")
+            </div>
+            <input type="text" asp-for="@Model.Username" />
+        </div>
+        <div>
+            <div class="col">
+                @SharedLocalizer.GetLocalizedHtmlString("Password")
+            </div>
+            <input type="password" asp-for="@Model.Password" />
+        </div>
+        <div>
+            <input type="submit" value="@SharedLocalizer.GetLocalizedHtmlString("Login")" />
+        </div>
+        <div class="login-err">
+            @Model.Message
+        </div>
+    </div>
+</form>
+
+@section scripts {
+    <script>
+        $(function () {
+            $("#Username").focus();
+        });
+    </script>
+}

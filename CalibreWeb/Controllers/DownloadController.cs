@@ -17,12 +17,14 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using CalibreWeb.Models;
 using CalibreWeb.Repository;
 
 namespace CalibreWeb.Controllers
 {
+    [Authorize(Roles = AppUserRole.Download)]
     public class DownloadController : Controller
     {
         private IConfiguration configuration;

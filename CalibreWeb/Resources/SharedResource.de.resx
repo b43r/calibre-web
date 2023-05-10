@@ -144,7 +144,22 @@
   <data name="Language" xml:space="preserve">
     <value>Sprache:</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Anmelden</value>
+  </data>
+  <data name="LoginError" xml:space="preserve">
+    <value>Unbekannter Benutzername/Passwort!</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Abmelden</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Suchen...</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Benutzername</value>
   </data>
 </root>

@@ -1,5 +1,7 @@
-﻿@using CalibreWeb.Resources
+﻿@using CalibreWeb.Repository;
+@using CalibreWeb.Resources
 @inject LocService SharedLocalizer
+@inject IAppConfig appConfig
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,21 +21,38 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container-fluid">
-			<img src="~/images/Calibre_logo_2.png" height="64" class="navbar-brand" />
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+			<div class="navbar-brand">
+				<img src="~/images/Calibre_logo_2.png" height="64" />
+				<span>CalibreWeb</span>
+			</div>
+			
+			@if (!appConfig.RequireLogin || User.Identity.IsAuthenticated)
+			{
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			}
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item">
-						<a class="nav-link active">CalibreWeb</a>
-					</li>
-					<li class="nav-item"><a asp-page="/Index" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Books")</a></li>
-					<li class="nav-item"><a asp-page="/Author" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Authors")</a></li>
-				</ul>
-				<div class="d-flex me-4" role="search">
-					<input id="txt-search" class="form-control me-2" type="search" placeholder="@SharedLocalizer.GetLocalizedHtmlString("Search")" aria-label="@SharedLocalizer.GetLocalizedHtmlString("Search")">
-				</div>
+				@if (!appConfig.RequireLogin || User.Identity.IsAuthenticated)
+				{
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a asp-page="/Index" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Books")</a></li>
+						<li class="nav-item"><a asp-page="/Author" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Authors")</a></li>
+						@if (appConfig.RequireLogin)
+						{
+							<li class="nav-item"><a href="#" id="lnk-logout" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Logout")</a></li>
+						}
+					</ul>
+					<div class="d-flex me-4" role="search">
+						<input id="txt-search" class="form-control me-2" type="search" placeholder="@SharedLocalizer.GetLocalizedHtmlString("Search")" aria-label="@SharedLocalizer.GetLocalizedHtmlString("Search")">
+					</div>
+					@if (appConfig.RequireLogin)
+					{
+						<form id="frm-logout" method="post" asp-page="Logout">
+							<img id="btn-logout" src="~/images/logout.svg" title="@SharedLocalizer.GetLocalizedHtmlString("Logout")" />
+						</form>
+					}
+				}
 			</div>
 		</div>
 	</nav>
@@ -72,6 +91,10 @@
 			$("#txt-search").on("keyup", function () {
 				window.clearTimeout(searchTimeout);
 				searchTimeout = window.setTimeout(searchTimerElapsed, 200);
+			});
+
+			$("#btn-logout, #lnk-logout").click(function () {
+				$("#frm-logout").submit();
 			});
 		});
 

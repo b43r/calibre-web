@@ -7,6 +7,25 @@
 .navbar {
     width: 100%;
     position: fixed;
+    min-width: 300px;
+}
+
+.navbar-brand span {
+    padding-left: 10px;
+    position: relative;
+    top: 4px
+}
+
+@media (max-width: 991px) {
+    #btn-logout, #txt-search {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    #lnk-logout {
+        display: none;
+    }
 }
 
 #booklist div.left {
@@ -71,4 +90,43 @@ h2 {
 h3 {
     margin-bottom: 30px;
     margin-top: -20px;
+}
+
+#btn-logout {
+    cursor: pointer;
+    margin-right: 20px
+}
+
+.login-form {
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 400px;
+}
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: 100%;
+        border: 1px solid lightgray;
+        border-radius: 8px;
+        line-height: 32px;
+        margin-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .login-form input[type="submit"] {
+        margin-top: 20px;
+        border: 1px solid lightgray;
+        border-radius: 8px;
+        padding: 5px 20px;
+    }
+
+.login-err {
+    color: red;
+    padding-top: 10px;
 }

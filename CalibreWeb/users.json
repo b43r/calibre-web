@@ -1,0 +1,8 @@
+[
+  {
+    "name": "john.doe@example.org",
+    "password": "123456",
+    "salt": "",
+    "role": "download"
+  }
+]

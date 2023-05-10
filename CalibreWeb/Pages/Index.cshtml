@@ -1,6 +1,9 @@
 ﻿@page
+@using CalibreWeb.Models;
+@using CalibreWeb.Repository;
 @using CalibreWeb.Resources
 @inject LocService SharedLocalizer
+@inject IAppConfig appConfig;
 @model IndexModel
 @{
     ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Books");
@@ -34,6 +37,8 @@
                 <div class="tags">
                     <strong>@SharedLocalizer.GetLocalizedHtmlString("Language")</strong> @SharedLocalizer.GetLocalizedLanguage(book.Language)
                 </div>
+                @if (!appConfig.RequireLogin || User.IsInRole(AppUserRole.Download))
+                {
                 <div class="formats">
                     <strong>@SharedLocalizer.GetLocalizedHtmlString("Download")</strong>
                     @for (int i = 0; i < book.Formats.Count; i++)
@@ -41,6 +46,7 @@
                         <a href="@Url.Action("Index", "Download", new { id = book.Id, FormatId = book.Formats[i].Id })">@book.Formats[i].Format</a>@(i < book.Formats.Count - 1 ? ", " : "")
                     }
                 </div>
+                }
                 <div class="comments">
                     @Html.Raw(book.Comments)
                 </div>

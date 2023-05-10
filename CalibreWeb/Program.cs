@@ -21,16 +21,20 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 using CalibreWeb.Models;
 using CalibreWeb.Resources;
+using CalibreWeb.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddSingleton<LocService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddSingleton<UserRepository>();
+builder.Services.AddSingleton<IAppConfig>(new AppConfig(builder.Configuration));
 builder.Services.AddMvc();
 
 // German and English localization is supported, whereas German is the default
@@ -62,6 +66,32 @@ builder.Services.AddDbContext<CalibreContext>(options => options.UseSqlite(conne
 
 builder.Services.AddRazorPages();
 
+bool.TryParse(builder.Configuration["Calibre:RequireLogin"], out var requireLogin);
+if (requireLogin)
+{
+    builder.Services.AddAuthorization(options =>
+    {
+        options.FallbackPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+    });
+
+    builder.Services
+        .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(
+            options =>
+            {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
+                options.AccessDeniedPath = "/Login";
+            });
+}
+else
+{
+    // add a handler that authorizes everything to allow anonymous access
+    builder.Services.AddSingleton<IAuthorizationHandler, CalibreWeb.AllowAnonymous>();
+}
+
 var app = builder.Build();
 
 var locOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
@@ -80,6 +110,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
