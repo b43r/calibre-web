@@ -1,4 +1,5 @@
-﻿@using CalibreWeb.Repository;
+﻿@using CalibreWeb.Models;
+@using CalibreWeb.Repository;
 @using CalibreWeb.Resources
 @inject LocService SharedLocalizer
 @inject IAppConfig appConfig
@@ -38,12 +39,16 @@
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a asp-page="/Index" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Books")</a></li>
 						<li class="nav-item"><a asp-page="/Author" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Authors")</a></li>
+						@if (appConfig.RequireLogin && User.IsInRole(AppUserRole.Admin))
+						{
+							<li class="nav-item"><a asp-page="/Admin" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Admin")</a></li>
+						}
 						@if (appConfig.RequireLogin)
 						{
 							<li class="nav-item"><a href="#" id="lnk-logout" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Logout")</a></li>
 						}
 					</ul>
-					<div class="d-flex me-4" role="search">
+					<div class="d-flex me-4" role="search" id="div-search">
 						<input id="txt-search" class="form-control me-2" type="search" placeholder="@SharedLocalizer.GetLocalizedHtmlString("Search")" aria-label="@SharedLocalizer.GetLocalizedHtmlString("Search")">
 					</div>
 					@if (appConfig.RequireLogin)

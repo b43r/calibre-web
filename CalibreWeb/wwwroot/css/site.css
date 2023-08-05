@@ -83,6 +83,33 @@
     cursor: pointer;
 }
 
+#userlist thead tr {
+    font-weight: bold;
+    background-color: #EEEEEE;
+}
+
+    #userlist thead tr td {
+        padding: 10px;
+    }
+
+#userlist tbody tr td {
+    padding: 5px 10px;
+}
+
+#userlist tbody tr:hover {
+    background-color: #eeeeff;
+}
+
+    #userlist tbody tr img:hover {
+        filter: invert(17%) sepia(76%) saturate(6596%) hue-rotate(357deg) brightness(105%) contrast(116%);
+        cursor: pointer;
+    }
+
+#userlist thead img:hover {
+    filter: invert(39%) sepia(43%) saturate(3270%) hue-rotate(94deg) brightness(99%) contrast(103%);
+    cursor: pointer;
+}
+
 h2 {
     margin-bottom: 30px;
 }

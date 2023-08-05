@@ -27,19 +27,21 @@ namespace CalibreWeb.Repository
     public class UserRepository
     {
         private const string Base64Prefix = "b64/";
-        private const string UserFile = "users.json";
+        private const string UserFileName = "users.json";
         private const int SALT_SIZE = 24;
         private const int HASH_SIZE = 24;
         private const int ITERATIONS = 100000;
 
         private Dictionary<string, AppUser> userDict;
+        private string userFile;
 
         /// <summary>
         /// Create a new instance of the user repository.
         /// </summary>
         public UserRepository() {
 
-            string userFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, UserFile);
+            userFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, UserFileName);
+
             if (File.Exists(userFile))
             {
                 try
@@ -59,19 +61,59 @@ namespace CalibreWeb.Repository
                         }
                     }
 
+                    userDict = userList.ToDictionary(k => k.Name.ToLower(), v => v);
+
                     if (updated)
                     {
-                        string jsonData = JsonConvert.SerializeObject(userList, Formatting.Indented);
-                        File.WriteAllText(userFile, jsonData);
+                        SaveUsers();
                     }
-
-                    userDict = userList.ToDictionary(k => k.Name.ToLower(), v => v);
                 }
                 catch
                 {
                     // ignore
                 }
             }
+        }
+
+        /// <summary>
+        /// save the list of users to a file.
+        /// </summary>
+        private void SaveUsers()
+        {
+            var userList = userDict.Values.ToList();
+            string jsonData = JsonConvert.SerializeObject(userList, Formatting.Indented);
+            File.WriteAllText(userFile, jsonData);
+        }
+
+		/// <summary>
+		/// Returns a list of all users.
+		/// </summary>
+		/// <returns>list of AppUser</returns>
+		public List<AppUser> GetUsers()
+        {
+            if (userDict != null)
+            {
+                return userDict.Values.ToList();
+			}
+
+            return new List<AppUser>();
+        }
+
+        /// <summary>
+        /// Returns the user with the given name.
+        /// </summary>
+        /// <returns>AppUser or null</returns>
+        public AppUser GetUser(string userName)
+        {
+            if (userDict != null)
+            {
+                if (userDict.TryGetValue(userName.ToLower(), out var appUser))
+                {
+                    return appUser;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -83,7 +125,7 @@ namespace CalibreWeb.Repository
         /// <returns>true if user exists and password matches</returns>
         public bool CheckLogin(string username, string password, out string role)
         {
-            if (userDict != null && userDict.TryGetValue(username.ToLower(), out var user))
+            if (userDict != null && userDict.TryGetValue((username ?? "").ToLower(), out var user))
             {
                 var salt = Convert.FromBase64String(user.Salt.Substring(Base64Prefix.Length));
                 if (Convert.ToBase64String(CreateHash(password, salt)) == user.Password.Substring(Base64Prefix.Length))
@@ -103,6 +145,55 @@ namespace CalibreWeb.Repository
             }
 
             role = AppUserRole.None;
+            return false;
+        }
+
+        /// <summary>
+        /// Add a new user to the user list.
+        /// </summary>
+        /// <param name="username">user name</param>
+        /// <param name="password">password</param>
+        /// <param name="role">role </param>
+        public void AddUser(string username, string password, string role)
+        {
+            var salt = GetSalt();
+            var appUser = new AppUser
+            {
+                Name = username,
+                Salt = Base64Prefix + Convert.ToBase64String(salt),
+                Password = Base64Prefix + Convert.ToBase64String(CreateHash(password, salt)),
+                Role = role
+            };
+
+            userDict.Add(username.ToLower(), appUser);
+            SaveUsers();
+        }
+
+        /// <summary>
+        /// Delete the user with the given name from the user list.
+        /// </summary>
+        /// <param name="username">name of user to delete</param>
+        public void DeleteUser(string username)
+        {
+            userDict.Remove(username.ToLower());
+            SaveUsers();
+        }
+
+        /// <summary>
+        /// Update the role of the given user.
+        /// </summary>
+        /// <param name="username">user name</param>
+        /// <param name="role">role</param>
+        public bool UpdateRole(string username, string role)
+        {
+            var user = GetUser(username);
+            if (user != null)
+            {
+                user.Role = role;
+                SaveUsers();
+                return true;
+            }
+
             return false;
         }
 

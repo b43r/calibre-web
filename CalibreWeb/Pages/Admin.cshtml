@@ -1,0 +1,215 @@
+﻿@page
+@using CalibreWeb.Models;
+@using CalibreWeb.Resources
+@inject LocService SharedLocalizer
+@model AdminModel
+@{
+    ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Admin");
+}
+<h2>@ViewData["Title"]</h2>
+
+<table id="userlist">
+    <thead>
+        <tr>
+            <td>@SharedLocalizer.GetLocalizedHtmlString("Username")</td>
+            <td>@SharedLocalizer.GetLocalizedHtmlString("Role")</td>
+            <td><img src="~/images/add.svg" title="@SharedLocalizer.GetLocalizedHtmlString("AddUser")" data-bs-toggle="modal" data-bs-target="#dlg-add" /></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>
+                    @if (!user.Name.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        @Html.DropDownListFor(x => user.Role, Model.Roles, new { @class = "form-select" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(x => user.Role, Model.Roles, new { @class = "form-select", disabled = "disabled" })
+                    }
+                </td>
+                <td>
+                    @if (!user.Name.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        <img src="~/images/delete.svg" title="@SharedLocalizer.GetLocalizedHtmlString("Delete")" data-bs-toggle="modal" data-bs-target="#dlg-delete" />
+                    }
+                </td>
+            </tr>
+        }
+        <tr id="tr-template" class="d-none">
+            <td></td>
+            <td>@Html.DropDownList("user_Role", Model.Roles, new { @class = "form-select" })</td>
+            <td><img src="~/images/delete.svg" title="@SharedLocalizer.GetLocalizedHtmlString("Delete")" data-bs-toggle="modal" data-bs-target="#dlg-delete" /></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="modal fade" id="dlg-delete" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@SharedLocalizer.GetLocalizedHtmlString("DeleteUser")</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("Cancel")</button>
+                <button id="btn-delete" type="button" class="btn btn-danger">@SharedLocalizer.GetLocalizedHtmlString("Delete")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dlg-add" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@SharedLocalizer.GetLocalizedHtmlString("AddUser")</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">@SharedLocalizer.GetLocalizedHtmlString("Username"):</div>
+                    <div class="col-8"><input type="text" name="userName" class="form-control" autocomplete="off" /></div>
+                </div>
+                <div class="row pt-1">
+                    <div class="col-4">@SharedLocalizer.GetLocalizedHtmlString("Password"):</div>
+                    <div class="col-8"><input type="password" name="password" class="form-control" autocomplete="new-password" /></div>
+                </div>
+                <div class="row pt-1">
+                    <div class="col-4">@SharedLocalizer.GetLocalizedHtmlString("PasswordConfirm"):</div>
+                    <div class="col-8"><input type="password" name="passwordConfirm" class="form-control" autocomplete="new-password" /></div>
+                </div>
+                <div class="row pt-1">
+                    <div class="col-4">@SharedLocalizer.GetLocalizedHtmlString("Role"):</div>
+                    <div class="col-8">
+                        @Html.DropDownList("role", Model.Roles, new { @class = "form-select" })
+                    </div>
+                </div>
+                <div class="row pt-1">
+                    <div class="col-12">
+                        <span id="lbl-add-error" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("Cancel")</button>
+                <button id="btn-save" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("Save")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        let text = {
+            delete: "@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("DeleteUserContent"))",
+        }
+
+        $(function () {
+
+            $("#div-search").css("visibility", "hidden");
+
+            $("#dlg-delete").on("show.bs.modal", function(e) {
+                let tr = $(e.relatedTarget).closest("tr");
+                let userName = tr.children("td").eq(0).text();
+                $("#dlg-delete div.modal-body").html(text.delete.replace("{0}", userName));
+                $("#dlg-delete").data("userName", userName);
+                $("#dlg-delete").data("tr", tr);
+            });
+
+            $("#dlg-add").on("show.bs.modal", function (e) {
+                $("#dlg-add input[type='text']").val("");
+                $("#dlg-add input[type='password']").val("");               
+            });
+
+            $("#dlg-add").on("shown.bs.modal", function (e) {
+                $("#dlg-add input").eq(0).focus();
+            });
+
+            $("#userlist").on("change", "select", function(e) {
+                let role = $(e.target).val();
+                let userName = $(e.target).closest("tr").children("td").eq(0).text();
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin?handler=changeRole",
+                    data: {
+                        userName: userName,
+                        role: role
+                    },
+                    headers: {
+                        RequestVerificationToken: $("input:hidden[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (data) {
+                        if (!data.success) {
+                            location.href = location.href;
+                        }
+                    },
+                    error: function (data) {
+                        location.href = location.href;
+                    },
+                });
+            });
+
+            $("#btn-save").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin?handler=create",
+                    data: {
+                        userName: $("#dlg-add input[name='userName']").val(),
+                        password: $("#dlg-add input[name='password']").val(),
+                        passwordConfirm: $("#dlg-add input[name='passwordConfirm']").val(),
+                        role: $("#dlg-add select[name='role']").val(),
+                    },
+                    headers: {
+                        RequestVerificationToken: $("input:hidden[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            $("#dlg-add").modal("hide");
+                            let tr = $("#tr-template").clone();
+                            tr.removeAttr("id");
+                            tr.removeAttr("class");
+                            tr.children("td").eq(0).text($("#dlg-add input[name='userName']").val());
+                            tr.find("select").val($("#dlg-add select[name='role']").val());
+                            $("#userlist tbody").append(tr);
+                        } else {
+                            $("#lbl-add-error").text(data.error);
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    },
+                });
+            });
+
+            $("#btn-delete").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin?handler=delete",
+                    data: {
+                        userName: $("#dlg-delete").data("userName")
+                    },
+                    headers: {
+                        RequestVerificationToken: $("input:hidden[name='__RequestVerificationToken']").val()
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            let tr = $("#dlg-delete").data("tr");
+                            tr.remove();
+                            $("#dlg-delete").modal("hide");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data)
+                    },
+                });
+            });
+        });
+    </script>
+}
