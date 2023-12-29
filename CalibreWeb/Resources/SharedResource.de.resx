@@ -126,6 +126,9 @@
   <data name="AllAuthors" xml:space="preserve">
     <value>alle Autoren</value>
   </data>
+  <data name="AllBooks" xml:space="preserve">
+    <value>alle Bücher</value>
+  </data>
   <data name="AuthorName" xml:space="preserve">
     <value>Name des Autors</value>
   </data>
@@ -180,6 +183,9 @@
   <data name="Logout" xml:space="preserve">
     <value>Abmelden</value>
   </data>
+  <data name="NewBooks" xml:space="preserve">
+    <value>Die letzen Neuzugänge:</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Passwort</value>
   </data>
@@ -206,5 +212,11 @@
   </data>
   <data name="Username" xml:space="preserve">
     <value>Benutzername</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Willkommen</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Die Datenbank enthält zur Zeit &lt;strong&gt;{0} Bücher&lt;/strong&gt; von &lt;strong&gt;{1} Autoren&lt;/strong&gt;.</value>
   </data>
 </root>

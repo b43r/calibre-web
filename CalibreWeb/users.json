@@ -4,5 +4,11 @@
     "password": "123456",
     "salt": "",
     "role": "download"
+  },
+  {
+    "name": "admin",
+    "password": "admin",
+    "salt": "",
+    "role": "admin"
   }
 ]

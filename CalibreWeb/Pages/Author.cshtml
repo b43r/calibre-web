@@ -52,7 +52,7 @@
             $("#authorlist tr").click(function () {
                 var authorId = $(this).closest("tr").data("id");
                 if (authorId !== undefined) {
-                    location.href = '@Url.Page("Index")?authorId=' + authorId;
+                    location.href = '@Url.Page("Books")?authorId=' + authorId;
                 }
             });
 

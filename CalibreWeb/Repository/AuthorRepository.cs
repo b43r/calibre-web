@@ -28,6 +28,11 @@ namespace CalibreWeb.Repository
         {
         }
 
+        public int GetAuthorCount()
+        {
+            return CalibreContext.Authors.Count();
+        }
+
         public AuthorVm GetAuthorById(long id)
         {
             var author = CalibreContext.Authors.Find(id);

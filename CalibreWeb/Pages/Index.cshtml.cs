@@ -20,8 +20,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Localization;
 
 using CalibreWeb.Models;
-using CalibreWeb.ViewModels;
 using CalibreWeb.Repository;
+using CalibreWeb.ViewModels;
 
 namespace CalibreWeb.Pages
 {
@@ -32,6 +32,8 @@ namespace CalibreWeb.Pages
         private readonly BookRepository bookRepository;
         private readonly AuthorRepository authorRepository;
 
+        public IEnumerable<BookVm> Books { get; set; }
+
         public IndexModel(CalibreContext db, IStringLocalizer<SharedResource> loc)
         {
             bookRepository = new BookRepository(db);
@@ -39,30 +41,12 @@ namespace CalibreWeb.Pages
             this.loc = loc;
         }
 
-        public string Title { get; set; }
+        public string Text { get; set; }
 
-        public bool ShowAllLink { get; set; }
-
-        public IEnumerable<BookVm> Books { get; set; }
-
-        public void OnGet(long? authorId)
+        public void OnGet()
         {
-            if (authorId.HasValue)
-            {
-                var author = authorRepository.GetAuthorById(authorId.Value);
-                if (author != null)
-                {
-                    Books = bookRepository.GetBooksByAuthor(authorId.Value);
-
-                    Title = loc["Books"] + $" - {author.Name}";
-                    ShowAllLink = true;
-                    return;
-                }
-            }
-
-            Books = bookRepository.GetAllBooks();
-            Title = loc["Books"];
-            ShowAllLink = false;
+            Books = bookRepository.GetMostRecentBooks(5);
+            Text = string.Format(loc.GetString("WelcomeText").Value, bookRepository.GetBookCount(), authorRepository.GetAuthorCount());
         }
     }
 }

@@ -130,8 +130,9 @@ namespace CalibreWeb.Repository
                 var salt = Convert.FromBase64String(user.Salt.Substring(Base64Prefix.Length));
                 if (Convert.ToBase64String(CreateHash(password, salt)) == user.Password.Substring(Base64Prefix.Length))
                 {
-                    if (user.Role.Equals(AppUserRole.Admin, StringComparison.OrdinalIgnoreCase) ||
-                        user.Role.Equals(AppUserRole.Download, StringComparison.OrdinalIgnoreCase))
+                    if (user.Role != null &&
+                        (user.Role.Equals(AppUserRole.Admin, StringComparison.OrdinalIgnoreCase) ||
+                        user.Role.Equals(AppUserRole.Download, StringComparison.OrdinalIgnoreCase)))
                     {
                         role = user.Role;
                     }

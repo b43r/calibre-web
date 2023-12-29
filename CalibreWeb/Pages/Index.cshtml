@@ -3,83 +3,37 @@
 @using CalibreWeb.Repository;
 @using CalibreWeb.Resources
 @inject LocService SharedLocalizer
-@inject IAppConfig appConfig;
 @model IndexModel
 @{
-    ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Books");
+    ViewData["Title"] = SharedLocalizer.GetLocalizedHtmlString("Welcome");
 }
-<h2>@Model.Title (<span></span>@Model.Books.Count())</h2>
-@if (Model.ShowAllLink)
+<h2>@SharedLocalizer.GetLocalizedHtmlString("Welcome")</h2>
+<div>@Html.Raw(Model.Text)</div>
+@if (Model.Books.Any())
 {
-    <h3><a href="@Url.Page("Author")">@SharedLocalizer.GetLocalizedHtmlString("AllAuthors")</a></h3>
-}
-<div id="booklist">
-    @foreach (var book in Model.Books)
-    {
-        <div class="summary" data-title="@book.TitleAndSeries.ToLower()">
-            <div class="left">
-                @if (book.HasCover)
-                {
-                    <img class="cover" src="@Url.Action("Index", "Cover", new { path = Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(book.Path)) })" />
-                }
-                else
-                {
-                    <img class="cover" src="~/images/cover.jpg" />
-                }
-            </div>
-            <div class="right">
-                <div class="title">
-                    <strong>@book.TitleAndSeries</strong>
-                </div>
-                <div class="authors">
-                    <a href="@(Url.Page("Index") + "?authorId=" + book.AuthorId)">@book.Author</a>
-                </div>
-                <div class="tags">
-                    <strong>@SharedLocalizer.GetLocalizedHtmlString("Language")</strong> @SharedLocalizer.GetLocalizedLanguage(book.Language)
-                </div>
-                @if (!appConfig.RequireLogin || User.IsInRole(AppUserRole.Download))
-                {
-                <div class="formats">
-                    <strong>@SharedLocalizer.GetLocalizedHtmlString("Download")</strong>
-                    @for (int i = 0; i < book.Formats.Count; i++)
-                    {
-                        <a href="@Url.Action("Index", "Download", new { id = book.Id, FormatId = book.Formats[i].Id })">@book.Formats[i].Format</a>@(i < book.Formats.Count - 1 ? ", " : "")
-                    }
-                </div>
-                }
-                <div class="comments">
-                    @Html.Raw(book.Comments)
-                </div>
-            </div>
-            <div style="clear:both;"></div>
-        </div>
-    }
-</div>
+    <h5 class="pt-3">@SharedLocalizer.GetLocalizedHtmlString("NewBooks")</h5>
 
-@section scripts {
-    <script>
-        function doSearch(expr) {
-            let divs = $("#booklist > div");
-            let total = divs.length;
-            let visible = 0;
-            for (let i = 0; i < divs.length; i++) {
-                if ($(divs[i]).data("title").includes(expr)) {
-                    $(divs[i]).removeClass("d-none");
-                    visible++;
-                } else {
-                    $(divs[i]).addClass("d-none");
-                }
-            }
-
-            if (visible !== total) {
-                $("h2 > span").text(visible + "/");
-            } else {
-                $("h2 > span").text("");
-            }
+    <div id="mostrecent">
+        @foreach (var book in Model.Books)
+        {
+            <div class="card m-3" style="width: 18rem; display: inline-flex">
+                <a href="@Url.Action("Index", "Books", new { bookId = book.Id })">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <p class="card-text">@book.Author</p>
+                        <div>
+                            @if (book.HasCover)
+                            {
+                                <img class="cover" src="@Url.Action("Index", "Cover", new { path = Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(book.Path)) })" />
+                            }
+                            else
+                            {
+                                <img class="cover" src="~/images/cover.jpg" />
+                            }
+                        </div>
+                    </div>
+                </a>
+            </div>
         }
-
-        $(function () {
-            $("#txt-search").focus();
-        });
-    </script>
+    </div>
 }
