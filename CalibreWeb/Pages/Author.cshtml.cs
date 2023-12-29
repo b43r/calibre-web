@@ -40,6 +40,7 @@ namespace CalibreWeb.Pages
         public void OnGet()
         {
             Authors = authorRepository.GetAllAuthors();
-        }
+            ViewData["ShowSearch"] = true;
+		}
     }
 }

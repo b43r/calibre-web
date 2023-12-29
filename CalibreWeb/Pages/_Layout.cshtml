@@ -50,9 +50,12 @@
 							<li class="nav-item"><a href="#" id="lnk-logout" class="nav-link">@SharedLocalizer.GetLocalizedHtmlString("Logout")</a></li>
 						}
 					</ul>
-					<div class="d-flex me-4" role="search" id="div-search">
-						<input id="txt-search" class="form-control me-2" type="search" placeholder="@SharedLocalizer.GetLocalizedHtmlString("Search")" aria-label="@SharedLocalizer.GetLocalizedHtmlString("Search")">
-					</div>
+					@if (ViewData.ContainsKey("ShowSearch"))
+					{
+						<div class="d-flex me-4" role="search" id="div-search">
+							<input id="txt-search" class="form-control me-2" type="search" placeholder="@SharedLocalizer.GetLocalizedHtmlString("Search")" aria-label="@SharedLocalizer.GetLocalizedHtmlString("Search")">
+						</div>
+					}
 					@if (appConfig.RequireLogin)
 					{
 						<form id="frm-logout" method="post" asp-page="Logout">

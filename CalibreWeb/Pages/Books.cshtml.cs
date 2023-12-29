@@ -69,13 +69,15 @@ namespace CalibreWeb.Pages
 
                     Title = loc["Books"] + $" - {author.Name}";
                     ShowAllAuthors = true;
-                    return;
+					ViewData["ShowSearch"] = true;
+					return;
                 }
             }
 
             // show all books
             Books = bookRepository.GetAllBooks();
             Title = loc["Books"];
-        }
+			ViewData["ShowSearch"] = true;
+		}
     }
 }

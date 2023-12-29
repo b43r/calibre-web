@@ -113,8 +113,6 @@
 
         $(function () {
 
-            $("#div-search").css("visibility", "hidden");
-
             $("#dlg-delete").on("show.bs.modal", function(e) {
                 let tr = $(e.relatedTarget).closest("tr");
                 let userName = tr.children("td").eq(0).text();
