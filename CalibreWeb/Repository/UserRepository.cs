@@ -17,8 +17,7 @@
  */
 
 using System.Security.Cryptography;
-
-using Newtonsoft.Json;
+using System.Text.Json;
 
 using CalibreWeb.Models;
 
@@ -46,7 +45,11 @@ namespace CalibreWeb.Repository
             {
                 try
                 {
-                    var userList = JsonConvert.DeserializeObject<AppUser[]>(File.ReadAllText(userFile));
+                    var deserializeOptions = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+                    var userList = JsonSerializer.Deserialize<AppUser[]>(File.ReadAllText(userFile), deserializeOptions);
 
                     bool updated = false;
                     foreach (var user in userList)
@@ -81,7 +84,11 @@ namespace CalibreWeb.Repository
         private void SaveUsers()
         {
             var userList = userDict.Values.ToList();
-            string jsonData = JsonConvert.SerializeObject(userList, Formatting.Indented);
+            var serializeOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            string jsonData = JsonSerializer.Serialize(userList, serializeOptions);
             File.WriteAllText(userFile, jsonData);
         }
 
@@ -212,8 +219,7 @@ namespace CalibreWeb.Repository
         /// <returns>byte array</returns>
         private static byte[] CreateHash(string input, byte[] salt)
         {
-            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(input, salt, ITERATIONS);
-            return pbkdf2.GetBytes(HASH_SIZE);
+            return Rfc2898DeriveBytes.Pbkdf2(input, salt, ITERATIONS, HashAlgorithmName.SHA1, HASH_SIZE);
         }
     }
 }
